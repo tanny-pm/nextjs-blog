@@ -1,6 +1,9 @@
 import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
+import { remark } from "remark";
+import html from "remark-html";
+import { PostData } from "./types";
 
 const postsDirectory = path.join(process.cwd(), "posts");
 
@@ -20,8 +23,9 @@ export function getSortedPostsData() {
 
     // Combine the data with the id
     return {
-      id,
-      ...matterResult.data,
+      id: id,
+      title: matterResult.data.title,
+      date: matterResult.data.date,
     };
   });
   // Sort posts by date
@@ -46,11 +50,12 @@ export function getAllPostIds() {
   });
 }
 
-export async function getPostData(id) {
+export async function getPostData(id: string): Promise<PostData> {
   const fullPath = path.join(postsDirectory, `${id}.md`);
   const fileContents = fs.readFileSync(fullPath, "utf8");
 
   const matterResult = matter(fileContents);
+  console.log(matterResult.data.date);
 
   const processedContent = await remark()
     .use(html)
@@ -59,11 +64,9 @@ export async function getPostData(id) {
   const contentHtml = processedContent.toString();
 
   return {
-    id,
-    contentHtml,
-    ...matterResult.data,
+    id: id,
+    title: matterResult.data.title,
+    date: matterResult.data.date,
+    contents: contentHtml,
   };
 }
-
-import { remark } from "remark";
-import html from "remark-html";
