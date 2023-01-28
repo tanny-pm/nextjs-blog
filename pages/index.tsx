@@ -15,7 +15,11 @@ export async function getStaticProps() {
   };
 }
 
-const Home: React.FC = (allPostsData: PostData[]) => {
+type Props = {
+  allPostsData: PostData[];
+};
+
+const Home: React.FC<Props> = ({ allPostsData }) => {
   return (
     <Layout home>
       <Head>
