@@ -26,7 +26,6 @@ type Props = {
 };
 
 const Post: React.FC<Props> = ({ postData }) => {
-  console.log(postData);
   return (
     <Layout>
       <>
